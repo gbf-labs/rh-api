@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+
+  postgres:
+    build: ./postgres
+    image: rhpostgres
+    container_name: postgresserver
+    restart: always
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: 'rh'
+      POSTGRES_USER: 'postgres'
+    ports:
+      - "5432:5432"
+    networks:
+      rhbenetwork:
+        ipv4_address: 10.230.0.23
+        aliases:
+          - postgress3
+    hostname: debpostgres
+    secrets:
+    - postgres_password
+
+  api:
+    build: .
+    image: rhapi
+    container_name: apiserver
+    restart: always
+    ports:
+      - "5000:5000"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:5000"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    networks:
+      rhbenetwork:
+        ipv4_address: 10.230.0.21
+        aliases:
+          - apis2
+    depends_on:
+      - postgres
+    hostname: debapi
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres
+
+networks:
+  rhbenetwork:
+    driver: bridge
+    attachable: true
+    ipam:
+      config:
+        - subnet: 10.230.0.0/24

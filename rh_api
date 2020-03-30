@@ -1,0 +1,33 @@
+upstream _api {
+  server unix:/run/uwsgi/app/api/socket;
+}
+
+server {
+  listen 5000;
+  server_name www.test.com;
+  root /app;
+  location / {
+    try_files $uri @uwsgi;
+  }
+  location @uwsgi {
+    include uwsgi_params;
+    uwsgi_pass _api;
+  }
+  
+  location /download/vpn {
+    alias /home/admin/all_vpn;
+  }
+
+  location /download/vessel/vpn {
+    alias /home/admin/all_vpn/VESSEL_VPN;
+  }
+
+  location /pdf {
+    alias /app/pdf;
+  }
+
+  location /csv {
+    alias /app/csv;
+  }
+
+}

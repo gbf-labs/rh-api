@@ -1,0 +1,52 @@
+This API is for Getting Vessel Device Information
+---
+tags:
+  - Devices
+produces:
+  - application/json
+parameters:
+  - name: token
+    in: header
+    description: Token
+    required: true
+    type: string
+  - name: userid
+    in: header
+    description: User ID
+    required: true
+    type: string
+  - name: vessel_id
+    in: query
+    description: Vessel ID
+    required: true
+    type: string
+  - name: device_id
+    in: query
+    description: Device ID
+    required: true
+    type: string
+  - name: start_date
+    in: query
+    description: Start Date
+    required: true
+    type: string
+  - name: end_date
+    in: query
+    description: End Date
+    required: true
+    type: string
+  - name: limit
+    in: query
+    description: Limit
+    required: true
+    type: string
+  - name: page
+    in: query
+    description: Page
+    required: true
+    type: string
+responses:
+  500:
+    description: Error
+  200:
+    description: Vessel Device Info
